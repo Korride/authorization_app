@@ -1,0 +1,1815 @@
+{
+  "info": {
+    "_postman_id": "d82c4a2a-f560-4340-bdc1-21871c2777fa",
+    "name": "Auth API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53571212",
+    "_collection_link": "https://go.postman.co/collection/53571212-d82c4a2a-f560-4340-bdc1-21871c2777fa?source=collection_link"
+  },
+  "item": [
+    {
+      "name": "Register",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "formdata",
+          "formdata": [
+            {
+              "key": "username",
+              "value": "test8",
+              "type": "text"
+            },
+            {
+              "key": "email",
+              "value": "test8@example.com",
+              "type": "text"
+            },
+            {
+              "key": "password",
+              "value": "test8test8",
+              "type": "text"
+            },
+            {
+              "key": "password2",
+              "value": "test8test8",
+              "type": "text"
+            },
+            {
+              "key": "first_name",
+              "value": "Иван",
+              "type": "text"
+            },
+            {
+              "key": "last_name",
+              "value": "Петров",
+              "type": "text"
+            },
+            {
+              "key": "phone",
+              "value": "+7 999 123-45-67",
+              "type": "text"
+            }
+          ]
+        },
+        "url": {
+          "raw": "{{base_url}}/register/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "register",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Login",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {\r",
+              "    const response = pm.response.json();\r",
+              "    \r",
+              "    pm.environment.set(\"access_token\", response.access);\r",
+              "    pm.environment.set(\"refresh_token\", response.refresh);\r",
+              "    \r",
+              "    console.log(\"Токены сохранены!\");\r",
+              "    console.log(\"Access Token:\", response.access.substring(0, 50) + \"...\");\r",
+              "} else {\r",
+              "    console.log(\"Ошибка входа:\", pm.response.text());\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"super_admin@example.com\",\r\n    \"password\": \"superadmin123\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/login/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "login",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Profile",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "url": {
+          "raw": "{{base_url}}/profile/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "profile",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PATCH",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"first_name\": \"Петр\",\r\n    \"last_name\": \"Сидоров\",\r\n    \"phone\": \"+7 916 888-77-66\",\r\n    \"date_of_birth\": \"1990-05-15\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/profile/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "profile",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Token refresh",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {\r",
+              "    const response = pm.response.json();\r",
+              "    pm.environment.set(\"access_token\", response.access);\r",
+              "    console.log(\"Access Token обновлен!\");\r",
+              "} else {\r",
+              "    console.log(\"Ошибка обновления токена\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  {{access_token}}",
+            "type": "text",
+            "disabled": true
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"refresh\": \"{{refresh_token}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/token/refresh/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "token",
+            "refresh",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Logout",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 205) {\r",
+              "    pm.environment.unset(\"access_token\");\r",
+              "    pm.environment.unset(\"refresh_token\");\r",
+              "    console.log(\"Выход выполнен, токены удалены\");\r",
+              "} else {\r",
+              "    console.log(\"Ошибка выхода\");\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer  {{access_token}}",
+            "type": "text"
+          },
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"refresh\": \"{{refresh_token}}\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/logout/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "logout",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Deactivate",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "if (pm.response.code === 200) {\r",
+              "    const response = pm.response.json();\r",
+              "    console.log(\"Пользователь деактивирован:\", response);\r",
+              "    \r",
+              "    pm.environment.unset(\"access_token\");\r",
+              "    pm.environment.unset(\"refresh_token\");\r",
+              "    \r",
+              "    console.log(\"Токены удалены. Пользователь больше не может войти.\");\r",
+              "} else {\r",
+              "    console.error(\"Ошибка деактивации:\", pm.response.text());\r",
+              "}"
+            ],
+            "type": "text/javascript",
+            "packages": {},
+            "requests": {}
+          }
+        }
+      ],
+      "request": {
+        "auth": {
+          "type": "noauth"
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{access_token}}",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"test7@example.ru\",\r\n    \"password\": \"test7test7\"\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/deactivate/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "deactivate",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "My permissions",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/my-permissions/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "my-permissions",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Full profile update",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"newemail@example.com\",\r\n    \"first_name\": \"Алексей\",\r\n    \"last_name\": \"Иванов\",\r\n    \"phone\": \"+7 999 888-77-66\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/profile/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "profile",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change password",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"old_password\": \"securepass123\",\r\n    \"new_password\": \"newpassword123\",\r\n    \"confirm_password\": \"newpassword123\"\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/change-password/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "change-password",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Users list",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/users/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Detail user info",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/users/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Changing user info",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"updated@example.com\",\r\n    \"first_name\": \"Обновленное\",\r\n    \"last_name\": \"Имя\",\r\n    \"is_active\": true\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/users/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete user(admin)",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"email\": \"updated@example.com\",\r\n    \"first_name\": \"Обновленное\",\r\n    \"last_name\": \"Имя\",\r\n    \"is_active\": true\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/users/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "users",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Roles",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/roles/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "roles",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New role",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"content_editor\",\r\n    \"description\": \"Редактор контента\"\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/roles/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "roles",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Detail role info",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/roles/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "roles",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Changing role info",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"super_admin\",\r\n    \"description\": \"Супер-администратор с полным доступом\"\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/roles/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "roles",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete role",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/roles/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "roles",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Permissions",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/permissions/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "permissions",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "New permission",
+      "request": {
+        "method": "POST",
+        "header": [],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"name\": \"content - publish\",\r\n    \"codename\": \"content.publish\",\r\n    \"resource_type\": \"content\",\r\n    \"action\": \"publish\",\r\n    \"description\": \"Публикация контента\"\r\n}",
+          "options": {
+            "raw": {
+              "language": "json"
+            }
+          }
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/permisiions/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "permisiions",
+            ""
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Detail permission  info",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/permissions/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "permissions",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Roles list",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/user-roles/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "user-roles",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change user roles",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user\": 4,\r\n    \"role\": 2\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/user-roles/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "user-roles",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete user's role",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/user-roles/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "user-roles",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Role  permissions list",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user\": 4,\r\n    \"role\": 2\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/role-permissions/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "role-permissions",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Change role permissions",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"role\": 2,\r\n    \"permission\": 5\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/role-permissions/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "role-permissions",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": "",
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete role permission",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/admin/role-permissions/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "admin",
+            "role-permissions",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Content list",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user\": 4,\r\n    \"role\": 2\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/mock/content",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mock",
+            "content"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Make content",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\r\n    \"user\": 4,\r\n    \"role\": 2\r\n}"
+        },
+        "url": {
+          "raw": "{{base_url}}/mock/content",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mock",
+            "content"
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Content detail",
+      "protocolProfileBehavior": {
+        "disableBodyPruning": true
+      },
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "GET",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/mock/content/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mock",
+            "content",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Update content",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/mock/content/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mock",
+            "content",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    },
+    {
+      "name": "Delete content",
+      "request": {
+        "auth": {
+          "type": "bearer",
+          "bearer": [
+            {
+              "key": "token",
+              "value": "{{access_token}}",
+              "type": "string"
+            }
+          ]
+        },
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json",
+            "type": "text"
+          },
+          {
+            "key": "",
+            "value": "",
+            "type": "text"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": ""
+        },
+        "url": {
+          "raw": "{{base_url}}/mock/content/1/",
+          "host": [
+            "{{base_url}}"
+          ],
+          "path": [
+            "mock",
+            "content",
+            "1",
+            ""
+          ],
+          "query": [
+            {
+              "key": "",
+              "value": null,
+              "type": "text",
+              "disabled": true
+            }
+          ]
+        }
+      },
+      "response": []
+    }
+  ]
+}
