@@ -1,3 +1,4 @@
+#Шаблон для .env файла
 Django config
 SECRET_KEY=
 DEBUG=True
