@@ -52,7 +52,7 @@ class LoginView(APIView):
 
         if not user.is_active:
             return Response(
-                {"error": "Account is deactivated"}, status.HTTP_403_FORBIDDEN
+                {"error": "Account is deactivated"}, status.HTTP_401_UNAUTHORIZED
             )
 
         refresh = RefreshToken.for_user(user)
