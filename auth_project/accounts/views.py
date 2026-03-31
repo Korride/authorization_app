@@ -107,7 +107,7 @@ class DeactivateUserView(APIView):
             )
 
         try:
-            # Просто деактивируем пользователя
+
             user.is_active = False
             user.save()
 
